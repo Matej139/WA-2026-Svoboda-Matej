@@ -3,6 +3,56 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+h1 {
+    font-size: 36px;
+    color: red;
+}
+
 p {
     font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+header, footer {
+    background-color: aliceblue;
+    padding: 1rem; /* 1 rem = 16px */
+}
+
+footer p {
+    margin: unset; /* Odstraní výchozí margin pro p v footeru */
+}
+
+.page-wrapper {
+    width: 90%;
+    margin: 0 auto; /* Vycentruje obsah */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto; /* Dva sloupce stejné šířky */
+    gap: 1rem; /* mezera mezi sloupci */
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+nav a {
+    display: block;
+    background-color: #ccc;
+    color: black;
+    text-decoration: none;
+
+}
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Umožní zalamování položek v navigaci */
+    padding: 0; /* Odstraní výchozí padding pro ul */;
 }

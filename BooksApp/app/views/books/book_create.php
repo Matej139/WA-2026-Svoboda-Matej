@@ -13,7 +13,7 @@
     </div>
 
     <div>
-        <form action="">
+        <form action="../../controllers/BookController.php" method="POST" enctype="multipart/form-data">
             <div>
                 <label for="title">Název knihy: <span>*</span></label>
                 <input type="text" id="title" name="title" required>
@@ -31,8 +31,24 @@
                 <input type="text" id="subcategory" name="subcategory" required>
             </div>
             <div>
+                <label for="isbn">ISBN: </label>
+                <input type="text" id="isbn" name="isbn">
+            </div>
+            <div>
                 <label for="year">Rok vydání: <span>*</span></label>
                 <input type="number" id="year" name="year" required>
+            </div>
+             <div>
+                <label for="price">Cena: </label>
+                <input type="number" id="price" name="price" step="0.5">
+            </div>
+            <div>
+                <label for="description">Popis: </label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+            <div>
+                <label for="images">Obrázek: </label>
+                <input type="file" id="image" name="images[]" accept="image/*" multiple>
             </div>
             <div>
                 <button type="submit">Uložit</button>

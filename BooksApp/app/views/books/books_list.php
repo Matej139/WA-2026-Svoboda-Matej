@@ -12,8 +12,8 @@
 
         <nav>
             <ul>
-                <li><a href="/BooksApp/public/index.php">Seznam knih</a></li>
-                <li><a href="/BooksApp/public/index.php?url=book/create">Přidat novou knihu</a></li>
+                <li><a href="/WA-2026-Svoboda-Matej/BooksApp/public/index.php">Seznam knih</a></li>
+                <li><a href="/WA-2026-Svoboda-Matej/BooksApp/public/index.php?url=book/create">Přidat novou knihu</a></li>
             </ul>
         </nav>
     </header>

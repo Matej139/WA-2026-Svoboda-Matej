@@ -13,7 +13,7 @@
     </div>
 
     <div>
-        <form action="../../controllers/BookController.php" method="POST" enctype="multipart/form-data">
+        <form action="/WA-2026-Svoboda-Matej/BooksApp/public/index.php?url=book/store" method="POST">
             <div>
                 <label for="title">Název knihy: <span>*</span></label>
                 <input type="text" id="title" name="title" required>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Přidat novou knihu - Knihovna</title>
-    <style>
+    <title>Upravit knihu - Knihovna</title>
+  <style>
 @keyframes rocketFly {
     0% { transform: translateX(-100px) rotate(45deg); opacity: 0; }
     10% { opacity: 1; }
@@ -42,7 +42,6 @@ body {
     overflow-x: hidden;
 }
 
-/* STARFIELD BACKGROUND */
 body::before {
     content: '';
     position: fixed;
@@ -51,39 +50,49 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 60px 70px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 50px 50px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 60px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50px 50px, #fff, rgba(0,0,0,0)),
         radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90px 10px, #fff, rgba(0,0,0,0));
+        radial-gradient(1px 1px at 90px 10px, #fff, rgba(0,0,0,0));
     background-repeat: repeat;
     background-size: 200px 200px;
-    animation: starTwinkle 4s ease-in-out infinite;
-    z-index: 0;
     pointer-events: none;
-}
-
-.rocket {
-    position: fixed;
-    font-size: 64px;
-    left: 0;
-    z-index: 1;
-    text-shadow: 0 0 10px rgba(255, 209, 102, 0.4);
+    z-index: 0;
+    animation: starTwinkle 4s ease-in-out infinite;
 }
 
 .rocket-container {
     position: fixed;
-    width: 100%;
-    height: 100%;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 1;
+    overflow: hidden;
 }
 
-h1, h2 {
+.rocket {
+    position: absolute;
+    font-size: 28px;
+    animation: rocketFly linear infinite;
+    filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.6));
+}
+
+h1 {
     color: #FFD166;
-    text-shadow: 0 2px 8px rgba(255, 209, 102, 0.2);
+    margin-bottom: 10px;
+    font-size: 2.2em;
+    font-weight: 700;
+    z-index: 10;
+}
+
+h2 {
+    color: #fff;
+    margin-top: 0;
+    font-size: 1.6em;
+    z-index: 10;
 }
 
 header, nav, main, form, button {
@@ -214,9 +223,8 @@ footer {
     padding-top: 20px;
     border-top: 1px solid rgba(255, 209, 102, 0.2);
     font-size: 0.9em;
-    z-index: 10;
 }
-    </style>
+  </style>
 </head>
 <body>
     <header>
@@ -230,45 +238,45 @@ footer {
     </header>
 
     <main>
-        <h2>Přidat novou knihu</h2> 
-        <p>Vyplňte údaje a uložte knihu do databáze.</p>
+        <h2>Upravit knihu</h2> 
+        <p>Upravte údaje a uložte změny do databáze.</p>
 
-        <form action="/WA-2026-Svoboda-Matej/BooksApp/public/index.php?url=book/store" method="POST">
+        <form action="/WA-2026-Svoboda-Matej/BooksApp/public/index.php?url=book/update/<?= $book['id'] ?>" method="POST">
             <div>
                 <label for="title">Název knihy: <span>*</span></label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="title" value="<?= $book['title'] ?>">
             </div>
             <div>
                 <label for="author">Autor: <span>*</span></label>
-                <input type="text" id="author" name="author" required>
+                <input type="text" id="author" name="author" value="<?= $book['author'] ?>" required>
             </div>
             <div>
                 <label for="category">Kategorie: </label>
-                <input type="text" id="category" name="category" required>
+                <input type="text" id="category" name="category" value="<?= $book['category'] ?>" required>
             </div>
             <div>
                 <label for="subcategory">Podkategorie: </label>
-                <input type="text" id="subcategory" name="subcategory" required>
+                <input type="text" id="subcategory" name="subcategory" value="<?= $book['subcategory'] ?>" required>
             </div>
             <div>
                 <label for="isbn">ISBN: </label>
-                <input type="text" id="isbn" name="isbn">
+                <input type="text" id="isbn" name="isbn" value="<?= $book['isbn'] ?>">
             </div>
             <div>
                 <label for="year">Rok vydání: <span>*</span></label>
-                <input type="number" id="year" name="year" required>
+                <input type="number" id="year" name="year" value="<?= $book['year'] ?>" required>
             </div>
-            <div>
+             <div>
                 <label for="price">Cena: </label>
-                <input type="number" id="price" name="price" step="0.5">
+                <input type="number" id="price" name="price" step="0.5" value="<?= $book['price'] ?>">
             </div>
             <div>
                 <label for="description">Popis: </label>
-                <textarea id="description" name="description" rows="4"></textarea>
+                <textarea id="description" name="description" rows="4"><?= $book['description'] ?></textarea>
             </div>
             <div>
                 <label for="images">Obrázek: </label>
-                <input type="file" id="image" name="images[]" accept="image/*" multiple>
+                <input type="file" id="image" name="images[]" accept="image/*" value="<?= $book['images'] ?>" multiple>
             </div>
             <div>
                 <button type="submit">Uložit</button>
@@ -280,7 +288,6 @@ footer {
         <p>&copy; WA 2026 - Výukový projekt</p>
     </footer>
 
-    <!-- ROCKET CONTAINER -->
     <div class="rocket-container" id="rocketContainer"></div>
 
     <script>

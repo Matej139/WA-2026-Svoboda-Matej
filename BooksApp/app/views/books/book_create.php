@@ -1,346 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Přidat novou knihu - Knihovna</title>
-    <style>
-@keyframes rocketFly {
-    0% { transform: translateX(-100px) rotate(45deg); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateX(calc(100vw + 100px)) rotate(45deg); opacity: 0; }
-}
+<?php require_once '../app/views/layout/header.php'; ?>
 
-@keyframes starTwinkle {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.8; }
-}
+<main class="container mx-auto px-6 pb-10 pt-6 flex-grow">
+  <div class="max-w-2xl mx-auto">
+    <div class="flex justify-between items-end mb-6">
+      <h2 class="text-3xl font-light tracking-widest text-slate-400 uppercase">Přidat novou knihu</h2>
+    </div>
 
-@keyframes bookExplode {
-    0% { 
-        opacity: 1; 
-        transform: translate(0, 0) scale(1) rotate(0deg);
+    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-2xl backdrop-blur-sm">
+      <p class="text-slate-400 mb-6 italic">Vyplňte údaje a uložte knihu do databáze.</p>
+
+      <form action="<?= BASE_URL ?>/index.php?url=book/store" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <div>
+          <label for="title" class="block text-sm font-medium text-slate-300 mb-2">
+            Název knihy <span class="text-red-400">*</span>
+          </label>
+          <input type="text" id="title" name="title" required
+                 class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+        </div>
+
+        <div>
+          <label for="author" class="block text-sm font-medium text-slate-300 mb-2">
+            Autor <span class="text-red-400">*</span>
+          </label>
+          <input type="text" id="author" name="author" required
+                 class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="category" class="block text-sm font-medium text-slate-300 mb-2">
+              Kategorie <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="category" name="category" required
+                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+          </div>
+
+          <div>
+            <label for="subcategory" class="block text-sm font-medium text-slate-300 mb-2">
+              Podkategorie <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="subcategory" name="subcategory" required
+                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="isbn" class="block text-sm font-medium text-slate-300 mb-2">
+              ISBN
+            </label>
+            <input type="text" id="isbn" name="isbn"
+                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+          </div>
+
+          <div>
+            <label for="year" class="block text-sm font-medium text-slate-300 mb-2">
+              Rok vydání <span class="text-red-400">*</span>
+            </label>
+            <input type="number" id="year" name="year" required
+                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+          </div>
+        </div>
+
+        <div>
+          <label for="price" class="block text-sm font-medium text-slate-300 mb-2">
+            Cena (Kč)
+          </label>
+          <input type="number" id="price" name="price" step="0.01"
+                 class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+        </div>
+
+        <div>
+          <label for="description" class="block text-sm font-medium text-slate-300 mb-2">
+            Popis
+          </label>
+          <textarea id="description" name="description" rows="4"
+                    class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-vertical"></textarea>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Obrázky knihy</label>
+          <div class="w-full">
+            <label for="images" class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-800/30 hover:bg-slate-700/50 hover:border-blue-400 transition-colors">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <span id="file-title" class="text-sm text-slate-400 font-semibold">Klikni pro výběr souborů</span>
+                <span id="file-info" class="text-xs text-slate-500 mt-1 text-center px-4">Žádné soubory nebyly vybrány</span>
+              </div>
+              <input type="file" id="images" name="images[]" multiple accept="image/*" class="hidden">
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit"
+                  class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            Uložit knihu
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Najdeme naše HTML prvky podle ID
+  const fileInput = document.getElementById('images');
+  const fileTitle = document.getElementById('file-title');
+  const fileInfo = document.getElementById('file-info');
+
+  // Posloucháme událost 'change' (změna hodnoty v inputu)
+  fileInput.addEventListener('change', function(event) {
+    const files = event.target.files;
+    
+    if (files.length === 0) {
+      // Uživatel výběr zrušil
+      fileTitle.textContent = 'Klikněte pro výběr souborů';
+      fileTitle.className = 'text-sm text-slate-400 font-semibold';
+      fileInfo.textContent = 'Žádné soubory nebyly vybrány';
+    } else if (files.length === 1) {
+      // Vybrán 1 soubor - ukážeme jeho název
+      fileTitle.textContent = 'Soubor připraven';
+      fileTitle.className = 'text-sm text-blue-400 font-bold';
+      fileInfo.textContent = files[0].name;
+    } else {
+      // Vybráno více souborů - ukážeme počet
+      fileTitle.textContent = 'Soubory připraveny';
+      fileTitle.className = 'text-sm text-blue-400 font-bold';
+      fileInfo.textContent = 'Vybráno celkem: ' + files.length + ' souborů';
     }
-    100% { 
-        opacity: 0; 
-        transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(360deg);
-    }
-}
+  });
+</script>
 
-* {
-    position: relative;
-}
-
-body {
-    background: linear-gradient(135deg, #0a1428 0%, #1a2541 50%, #0f172a 100%);
-    color: #e5e5e5;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 30px;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* STARFIELD BACKGROUND */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 60px 70px, #fff, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 50px 50px, #ddd, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90px 10px, #fff, rgba(0,0,0,0));
-    background-repeat: repeat;
-    background-size: 200px 200px;
-    animation: starTwinkle 4s ease-in-out infinite;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.rocket {
-    position: fixed;
-    font-size: 64px;
-    left: 0;
-    z-index: 1;
-    text-shadow: 0 0 10px rgba(255, 209, 102, 0.4);
-}
-
-.rocket-container {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-
-h1, h2 {
-    color: #FFD166;
-    text-shadow: 0 2px 8px rgba(255, 209, 102, 0.2);
-}
-
-header, nav, main, form, button {
-    z-index: 10;
-}
-
-header {
-    margin-bottom: 30px;
-    border-bottom: 2px solid #FFD166;
-    padding-bottom: 20px;
-}
-
-nav {
-    display: flex;
-    gap: 10px;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 10px;
-}
-
-nav a {
-    text-decoration: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    background: rgba(239, 71, 111, 0.85);
-    color: white;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-nav a:hover {
-    background: #FFD166;
-    color: #0a1428;
-    transform: translateY(-2px);
-}
-
-main {
-    background: rgba(10, 20, 40, 0.8);
-    padding: 30px;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 209, 102, 0.15);
-    max-width: 600px;
-}
-
-p {
-    color: #aaa;
-    margin-top: 0;
-}
-
-form div {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 8px;
-}
-
-label span {
-    color: #FFD166;
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="file"],
-textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid rgba(255, 209, 102, 0.3);
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="file"]:focus,
-textarea:focus {
-    outline: none;
-    border-color: #FFD166;
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 12px rgba(255, 209, 102, 0.2);
-}
-
-textarea {
-    resize: vertical;
-    font-family: inherit;
-}
-
-button {
-    background: linear-gradient(135deg, #EF476F, #FF6B8F);
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(239, 71, 111, 0.3);
-}
-
-footer {
-    text-align: center;
-    color: #FFD166;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 209, 102, 0.2);
-    font-size: 0.9em;
-    z-index: 10;
-}
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Aplikace Knihovna</h1>
-        <nav style="margin-bottom:20px;">
-            <ul>
-                <li><a href="/WA-2026-Svoboda-Matej/BooksApp/public/index.php">Seznam knih</a></li>
-                <li><a href="/WA-2026-Svoboda-Matej/BooksApp/public/index.php?url=book/create">Přidat novou knihu</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <h2>Přidat novou knihu</h2> 
-        <p>Vyplňte údaje a uložte knihu do databáze.</p>
-
-        <form action="/WA-2026-Svoboda-Matej/BooksApp/public/index.php?url=book/store" method="POST">
-            <div>
-                <label for="title">Název knihy: <span>*</span></label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div>
-                <label for="author">Autor: <span>*</span></label>
-                <input type="text" id="author" name="author" required>
-            </div>
-            <div>
-                <label for="category">Kategorie: </label>
-                <input type="text" id="category" name="category" required>
-            </div>
-            <div>
-                <label for="subcategory">Podkategorie: </label>
-                <input type="text" id="subcategory" name="subcategory" required>
-            </div>
-            <div>
-                <label for="isbn">ISBN: </label>
-                <input type="text" id="isbn" name="isbn">
-            </div>
-            <div>
-                <label for="year">Rok vydání: <span>*</span></label>
-                <input type="number" id="year" name="year" required>
-            </div>
-            <div>
-                <label for="price">Cena: </label>
-                <input type="number" id="price" name="price" step="0.5">
-            </div>
-            <div>
-                <label for="description">Popis: </label>
-                <textarea id="description" name="description" rows="4"></textarea>
-            </div>
-            <div>
-                <label for="images">Obrázek: </label>
-                <input type="file" id="image" name="images[]" accept="image/*" multiple>
-            </div>
-            <div>
-                <button type="submit">Uložit</button>
-            </div>
-        </form>
-    </main>
-
-    <footer>
-        <p>&copy; WA 2026 - Výukový projekt</p>
-    </footer>
-
-    <!-- ROCKET CONTAINER -->
-    <div class="rocket-container" id="rocketContainer"></div>
-
-    <script>
-        function createRockets() {
-            const container = document.getElementById('rocketContainer');
-            const items = ['🚀', '🛸'];
-            
-            setInterval(() => {
-                const randomItem = items[Math.floor(Math.random() * items.length)];
-                const rocket = document.createElement('div');
-                rocket.className = 'rocket';
-                rocket.textContent = randomItem;
-                
-                const randomTop = Math.random() * 80 + 10;
-                const randomDuration = Math.random() * 3 + 4;
-                const randomDelay = Math.random() * 1;
-                
-                rocket.style.top = randomTop + '%';
-                rocket.style.animation = `rocketFly ${randomDuration}s linear ${randomDelay}s 1 forwards`;
-                
-                container.appendChild(rocket);
-                
-                setTimeout(() => rocket.remove(), (randomDuration + randomDelay) * 1000);
-            }, 3000);
-        }
-
-        function createBookExplosion(x, y) {
-            for (let i = 0; i < 6; i++) {
-                const book = document.createElement('div');
-                book.textContent = '📚';
-                book.style.position = 'fixed';
-                book.style.left = x + 'px';
-                book.style.top = y + 'px';
-                book.style.fontSize = '20px';
-                book.style.pointerEvents = 'none';
-                book.style.zIndex = '9999';
-                
-                const angle = (i / 6) * Math.PI * 2;
-                const distance = 150;
-                const tx = Math.cos(angle) * distance;
-                const ty = Math.sin(angle) * distance;
-                
-                book.style.setProperty('--tx', tx + 'px');
-                book.style.setProperty('--ty', ty + 'px');
-                book.style.animation = `bookExplode 0.8s ease-out forwards`;
-                
-                document.body.appendChild(book);
-                setTimeout(() => book.remove(), 800);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            createRockets();
-            
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.btn') && !e.target.closest('input') && !e.target.closest('textarea') && !e.target.closest('button')) {
-                    createBookExplosion(e.clientX, e.clientY);
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<?php require_once '../app/views/layout/footer.php'; ?>

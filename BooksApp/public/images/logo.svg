@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="90" viewBox="0 0 360 90" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Knihomil logo</title>
+  <desc id="logoDesc">Jednoduché logo knihy se třemi vodorovnými čarami.</desc>
+  <rect width="360" height="90" fill="none"/>
+  <g transform="translate(152 15)">
+    <rect x="0" y="0" width="56" height="60" rx="10" ry="10" fill="#2563EB" stroke="#1E3A8A" stroke-width="4"/>
+    <rect x="10" y="16" width="36" height="4" rx="2" ry="2" fill="#BFDBFE"/>
+    <rect x="10" y="28" width="36" height="4" rx="2" ry="2" fill="#BFDBFE"/>
+    <rect x="10" y="40" width="36" height="4" rx="2" ry="2" fill="#BFDBFE"/>
+  </g>
+</svg>

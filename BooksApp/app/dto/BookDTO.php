@@ -17,8 +17,8 @@ class BookDTO {
         $this->title = $data['title'] ?? '';
         $this->author = $data['author'] ?? '';
         $this->isbn = $data['isbn'] ?? '';
-        $this->category = $data['category'] ?? '';
-        $this->subcategory = $data['subcategory'] ?? '';
+        $this->category = isset($data['category']) ? (int)$data['category'] : 0;
+        $this->subcategory = isset($data['subcategory']) ? (int)$data['subcategory'] : 0;
         $this->year = $data['year'] ?? 0;
         $this->price = $data['price'] ?? 0;
         $this->link = $data['link'] ?? '';

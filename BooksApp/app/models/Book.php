@@ -31,20 +31,37 @@ class Book {
     }
 
     public function getAll() {
-    $sql = "SELECT * FROM books";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->execute();
+        $sql = "SELECT
+                    books.*,
+                    books.category AS category_id,
+                    books.subcategory AS subcategory_id,
+                    COALESCE(c.name, books.category) AS category,
+                    COALESCE(s.name, books.subcategory) AS subcategory
+                FROM books
+                LEFT JOIN categories c ON books.category = c.id
+                LEFT JOIN subcategories s ON books.subcategory = s.id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function getById($id) {
-    $sql = "SELECT * FROM books WHERE id = :id";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->execute([':id' => $id]);
+    public function getById($id) {
+        $sql = "SELECT
+                    books.*,
+                    books.category AS category_id,
+                    books.subcategory AS subcategory_id,
+                    COALESCE(c.name, books.category) AS category,
+                    COALESCE(s.name, books.subcategory) AS subcategory
+                FROM books
+                LEFT JOIN categories c ON books.category = c.id
+                LEFT JOIN subcategories s ON books.subcategory = s.id
+                WHERE books.id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $id]);
 
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function delete($id) {
         $book = $this->getById($id);

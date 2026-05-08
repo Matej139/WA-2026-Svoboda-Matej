@@ -3,6 +3,20 @@
 class BookController {
     public function create() {
         $this->ensureAuthenticated();
+
+        require_once __DIR__ . '/../models/Database.php';
+        require_once __DIR__ . '/../models/Category.php';
+        require_once __DIR__ . '/../models/Subcategory.php';
+
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $categoryModel = new Category($db);
+        $subcategoryModel = new Subcategory($db);
+
+        $categories = $categoryModel->getAllCategories();
+        $subcategories = $subcategoryModel->getAllSubcategories();
+
         require_once __DIR__ . '/../views/books/book_create.php';
     }
 
@@ -15,6 +29,8 @@ class BookController {
         $uploadedImages = $this->processImageUploads();
         
         $data = $_POST;
+        $data['category'] = (int)($_POST['category'] ?? 0);
+        $data['subcategory'] = (int)($_POST['subcategory'] ?? 0);
         $data['images'] = $uploadedImages;
         
         $bookDTO = new BookDTO($data);
@@ -51,9 +67,21 @@ public function edit($id = null) {
     $this->ensureBookOwner($id);
 
     require_once '../app/models/Book.php';
+    require_once __DIR__ . '/../models/Database.php';
+    require_once __DIR__ . '/../models/Category.php';
+    require_once __DIR__ . '/../models/Subcategory.php';
 
     $bookModel = new Book();
     $book = $bookModel->getById($id);
+
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $categoryModel = new Category($db);
+    $subcategoryModel = new Subcategory($db);
+
+    $categories = $categoryModel->getAllCategories();
+    $subcategories = $subcategoryModel->getAllSubcategories();
 
     require_once __DIR__ . '/../views/books/book_edit.php';
 }
@@ -78,6 +106,8 @@ public function update($id = null) {
         }
         
         $data = $_POST;
+        $data['category'] = (int)($_POST['category'] ?? 0);
+        $data['subcategory'] = (int)($_POST['subcategory'] ?? 0);
         $data['images'] = $allImages;
         
         $bookDTO = new BookDTO($data);
@@ -92,23 +122,6 @@ public function update($id = null) {
         header("Location: /WA-2026-Svoboda-Matej/BooksApp/public/index.php");
         exit;
     }
-}
-
-public function delete($id = null) {
-    if (!$id) {
-        echo "Chybí ID";
-        return;
-    }
-
-    $this->ensureBookOwner($id);
-
-    require_once '../app/models/Book.php';
-
-    $book = new Book();
-    $book->delete($id);
-
-    header("Location: /WA-2026-Svoboda-Matej/BooksApp/public/index.php");
-    exit;
 }
 
 public function show($id = null) {

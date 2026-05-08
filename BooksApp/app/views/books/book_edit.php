@@ -31,16 +31,36 @@
             <label for="category" class="block text-sm font-medium text-slate-300 mb-2">
               Kategorie <span class="text-red-400">*</span>
             </label>
-            <input type="text" id="category" name="category" value="<?= htmlspecialchars($book['category']) ?>" required
-                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+            <select id="category" name="category" required
+                    class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+              <option value="">-- Vyberte kategorii --</option>
+              <?php if (!empty($categories)): ?>
+                <?php foreach ($categories as $cat): ?>
+                  <?php $isSelected = (isset($book['category_id']) && $book['category_id'] == $cat['id']) ? 'selected' : ''; ?>
+                  <option value="<?= htmlspecialchars($cat['id']) ?>" <?= $isSelected ?>><?= htmlspecialchars($cat['name']) ?></option>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <option disabled>Žádné kategorie nejsou k dispozici</option>
+              <?php endif; ?>
+            </select>
           </div>
 
           <div>
             <label for="subcategory" class="block text-sm font-medium text-slate-300 mb-2">
               Podkategorie <span class="text-red-400">*</span>
             </label>
-            <input type="text" id="subcategory" name="subcategory" value="<?= htmlspecialchars($book['subcategory']) ?>" required
-                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+            <select id="subcategory" name="subcategory" required
+                    class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+              <option value="">-- Vyberte podkategorii --</option>
+              <?php if (!empty($subcategories)): ?>
+                <?php foreach ($subcategories as $sub): ?>
+                  <?php $isSelected = (isset($book['subcategory_id']) && $book['subcategory_id'] == $sub['id']) ? 'selected' : ''; ?>
+                  <option value="<?= htmlspecialchars($sub['id']) ?>" <?= $isSelected ?>><?= htmlspecialchars($sub['name']) ?></option>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <option disabled>Žádné podkategorie nejsou k dispozici</option>
+              <?php endif; ?>
+            </select>
           </div>
         </div>
 

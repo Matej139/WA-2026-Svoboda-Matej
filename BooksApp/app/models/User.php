@@ -50,7 +50,7 @@ class User {
     }
 
     public function findById(int $id) {
-        $sql = "SELECT id, username, email, first_name, last_name, nickname, created_at FROM users WHERE id = :id";
+        $sql = "SELECT id, username, email, first_name, last_name, nickname, is_admin, created_at FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id]);
 

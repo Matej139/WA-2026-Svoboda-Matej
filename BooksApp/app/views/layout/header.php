@@ -39,8 +39,14 @@
                                 + Přidat knihu
                             </a>
                         </li>
-                        <li class="text-slate-400 text-sm">
+                        <?php $isAdminNav = isset($_SESSION['is_admin']) && (int)$_SESSION['is_admin'] === 1; ?>
+                        <li class="text-slate-400 text-sm flex items-center gap-2">
                             Ahoj, <span class="text-white font-semibold tracking-wide"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                            <?php if ($isAdminNav): ?>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] uppercase tracking-[0.16em] font-semibold bg-amber-600 text-amber-100 border border-amber-500">
+                                    Admin
+                                </span>
+                            <?php endif; ?>
                         </li>
                         <li>
                             <a href="<?= BASE_URL ?>/index.php?url=auth/logout" class="text-rose-400 hover:text-white transition-colors text-sm uppercase tracking-wider font-medium">

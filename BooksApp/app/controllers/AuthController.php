@@ -71,6 +71,7 @@ class AuthController {
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = !empty($user['nickname']) ? $user['nickname'] : $user['username'];
+                $_SESSION['is_admin'] = isset($user['is_admin']) ? (int)$user['is_admin'] : 0;
 
                 $this->addSuccessMessage('Vítejte zpět, ' . $_SESSION['user_name'] . '!');
                 header('Location: ' . BASE_URL . '/index.php');
@@ -86,6 +87,7 @@ class AuthController {
     public function logout() {
         unset($_SESSION['user_id']);
         unset($_SESSION['user_name']);
+        unset($_SESSION['is_admin']);
 
         $this->addSuccessMessage('Byli jste úspěšně odhlášeni.');
         header('Location: ' . BASE_URL . '/index.php');

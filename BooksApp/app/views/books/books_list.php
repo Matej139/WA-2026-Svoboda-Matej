@@ -34,9 +34,9 @@
                       <td class="px-6 py-4 text-slate-400"><?= $book['id'] ?></td>
                       <td class="px-6 py-4 text-slate-200 font-medium"><?= $book['title'] ?></td>
                       <td class="px-6 py-4 text-slate-300"><?= $book['author'] ?></td>
-                      <td class="px-6 py-4 text-slate-300"><?= $book['category'] ?></td>
-                      <td class="px-6 py-4 text-slate-300"><?= $book['subcategory'] ?></td>
-                      <td class="px-6 py-4 text-slate-300"><?= $book['year'] ?></td>
+                      <td class="px-6 py-4 text-emerald-400 font-medium"><?= htmlspecialchars($book['category_name'] ?? 'Nezařazeno') ?></td>
+                      <td class="px-6 py-4 text-slate-300"><?= htmlspecialchars($book['subcategory_name'] ?? 'Nezařazeno') ?></td>
+                      <td class="px-6 py-4 text-slate-300"><?= htmlspecialchars($book['year']) ?></td>
                       <td class="px-6 py-4 text-slate-300"><?= $book['price'] ?> Kč</td>
                       <td class="px-6 py-4 text-slate-300"><?= $book['isbn'] ?></td>
                       <td class="px-6 py-4 text-slate-300 max-w-xs truncate"><?= $book['description'] ?></td>
@@ -60,9 +60,21 @@
                       <td class="px-6 py-4">
                         <div class="flex flex-wrap gap-2">
                           <a href="<?= BASE_URL ?>/index.php?url=book/show/<?= $book['id'] ?>" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm transition-colors">Detail</a>
-                          <?php if (isset($_SESSION['user_id']) && isset($book['created_by']) && $_SESSION['user_id'] === $book['created_by']): ?>
-                              <a href="<?= BASE_URL ?>/index.php?url=book/edit/<?= $book['id'] ?>" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1 rounded text-sm transition-colors">Upravit</a>
-                              <a href="<?= BASE_URL ?>/index.php?url=book/delete/<?= $book['id'] ?>" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm transition-colors" onclick="return confirm('Opravdu chcete tuto knihu smazat?')">Smazat</a>
+                          <?php 
+                            $isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+                            $bookOwnerId = isset($book['created_by']) ? (int)$book['created_by'] : null;
+                            $currentUserId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null;
+                            $isAdminOtherBook = $isAdmin && $currentUserId !== $bookOwnerId;
+                            $editClass = $isAdminOtherBook ? 'bg-sky-600 hover:bg-sky-500' : 'bg-amber-600 hover:bg-amber-500';
+                            $deleteClass = $isAdminOtherBook ? 'bg-rose-500 hover:bg-rose-400' : 'bg-red-600 hover:bg-red-500';
+                          ?>
+                          <?php if ($currentUserId !== null && ($currentUserId === $bookOwnerId || $isAdmin)): ?>
+                              <a href="<?= BASE_URL ?>/index.php?url=book/edit/<?= $book['id'] ?>" class="<?= $editClass ?> text-white px-3 py-1 rounded text-sm transition-colors">
+                                  Upravit<?= $isAdminOtherBook ? ' (admin)' : '' ?>
+                              </a>
+                              <a href="<?= BASE_URL ?>/index.php?url=book/delete/<?= $book['id'] ?>" class="<?= $deleteClass ?> text-white px-3 py-1 rounded text-sm transition-colors" onclick="return confirm('Opravdu chcete tuto knihu smazat?')">
+                                  Smazat<?= $isAdminOtherBook ? ' (admin)' : '' ?>
+                              </a>
                           <?php endif; ?>
                         </div>
                       </td>

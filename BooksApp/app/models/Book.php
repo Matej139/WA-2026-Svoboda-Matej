@@ -31,15 +31,11 @@ class Book {
     }
 
     public function getAll() {
-        $sql = "SELECT
-                    books.*,
-                    books.category AS category_id,
-                    books.subcategory AS subcategory_id,
-                    COALESCE(c.name, books.category) AS category,
-                    COALESCE(s.name, books.subcategory) AS subcategory
+        $sql = "SELECT books.*, categories.name AS category_name, subcategories.name AS subcategory_name
                 FROM books
-                LEFT JOIN categories c ON books.category = c.id
-                LEFT JOIN subcategories s ON books.subcategory = s.id";
+                LEFT JOIN categories ON books.category = categories.id
+                LEFT JOIN subcategories ON books.subcategory = subcategories.id
+                ORDER BY books.id DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
 

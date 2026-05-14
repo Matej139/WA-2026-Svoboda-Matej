@@ -159,11 +159,40 @@ public function show($id = null) {
             exit;
         }
 
-        if (!isset($book['created_by']) || $book['created_by'] !== $_SESSION['user_id']) {
+        $isAdmin = $this->isAdmin();
+        $bookOwnerId = isset($book['created_by']) ? (int)$book['created_by'] : null;
+        $currentUserId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null;
+
+        if (!$isAdmin && ($bookOwnerId === null || $bookOwnerId !== $currentUserId)) {
             $_SESSION['messages']['error'][] = 'Nemáte oprávnění upravovat nebo mazat tuto knihu.';
             header('Location: ' . BASE_URL . '/index.php');
             exit;
         }
+    }
+
+    protected function isAdmin(): bool {
+        return isset($_SESSION['is_admin']) && (int)$_SESSION['is_admin'] === 1;
+    }
+
+    public function delete($id = null) {
+        if (!$id) {
+            echo "Chybí ID";
+            return;
+        }
+
+        $this->ensureBookOwner($id);
+
+        require_once '../app/models/Book.php';
+        $bookModel = new Book();
+
+        if ($bookModel->delete($id)) {
+            $_SESSION['messages']['success'][] = 'Kniha byla úspěšně smazána.';
+        } else {
+            $_SESSION['messages']['error'][] = 'Chyba při mazání knihy.';
+        }
+
+        header('Location: ' . BASE_URL . '/index.php');
+        exit;
     }
 
     // --- Pomocná metoda pro zpracování nahrávání obrázků ---

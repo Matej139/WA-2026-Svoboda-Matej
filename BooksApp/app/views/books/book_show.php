@@ -24,12 +24,12 @@
 
           <div class="bg-slate-700/30 border border-slate-600 rounded-lg p-4">
             <div class="text-sm text-slate-400 uppercase tracking-wider mb-1">Kategorie</div>
-            <div class="text-slate-200 font-medium"><?= htmlspecialchars($book['category']) ?></div>
+            <div class="text-slate-200 font-medium"><?= htmlspecialchars($book['category'] ?? 'Neuvedeno') ?></div>
           </div>
 
           <div class="bg-slate-700/30 border border-slate-600 rounded-lg p-4">
             <div class="text-sm text-slate-400 uppercase tracking-wider mb-1">Podkategorie</div>
-            <div class="text-slate-200 font-medium"><?= htmlspecialchars($book['subcategory']) ?></div>
+            <div class="text-slate-200 font-medium"><?= htmlspecialchars($book['subcategory'] ?? 'Neuvedeno') ?></div>
           </div>
 
           <div class="bg-slate-700/30 border border-slate-600 rounded-lg p-4">
@@ -80,13 +80,21 @@
         </div>
       <?php endif; ?>
 
-      <?php if (isset($_SESSION['user_id']) && isset($book['created_by']) && $_SESSION['user_id'] === $book['created_by']): ?>
+      <?php 
+        $isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+        $bookOwnerId = isset($book['created_by']) ? (int)$book['created_by'] : null;
+        $currentUserId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null;
+        $isAdminOtherBook = $isAdmin && $currentUserId !== $bookOwnerId;
+        $editButtonClass = $isAdminOtherBook ? 'bg-sky-600 hover:bg-sky-500' : 'bg-amber-600 hover:bg-amber-500';
+        $deleteButtonClass = $isAdminOtherBook ? 'bg-rose-500 hover:bg-rose-400' : 'bg-red-600 hover:bg-red-500';
+      ?>
+      <?php if ($currentUserId !== null && ($currentUserId === $bookOwnerId || $isAdmin)): ?>
           <div class="mt-8 flex gap-4">
-            <a href="<?= BASE_URL ?>/index.php?url=book/edit/<?= $book['id'] ?>" class="bg-amber-600 hover:bg-amber-500 text-white px-6 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-              ✏️ Upravit knihu
+            <a href="<?= BASE_URL ?>/index.php?url=book/edit/<?= $book['id'] ?>" class="<?= $editButtonClass ?> text-white px-6 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+              ✏️ Upravit knihu<?= $isAdminOtherBook ? ' (admin)' : '' ?>
             </a>
-            <a href="<?= BASE_URL ?>/index.php?url=book/delete/<?= $book['id'] ?>" class="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5" onclick="return confirm('Opravdu chcete tuto knihu smazat?')">
-              🗑️ Smazat knihu
+            <a href="<?= BASE_URL ?>/index.php?url=book/delete/<?= $book['id'] ?>" class="<?= $deleteButtonClass ?> text-white px-6 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5" onclick="return confirm('Opravdu chcete tuto knihu smazat?')">
+              🗑️ Smazat knihu<?= $isAdminOtherBook ? ' (admin)' : '' ?>
             </a>
           </div>
       <?php endif; ?>
